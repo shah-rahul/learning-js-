@@ -12,3 +12,10 @@ function reset() {
   
   document.getElementById("ageInDays").remove();
 }
+
+function generatepussy(){
+  var image = document.createElement("img");
+  var div = document.getElementById("flex-pussy-gen");
+  image.src="https://cdn2.thecatapi.com/images/1tj.jpg";
+  div.appendChild(image);
+}
