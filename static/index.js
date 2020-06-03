@@ -21,15 +21,15 @@ function generatepussy() {
 
 // challenge 3 rock decideWinner siccros
 function rps(yourChoice) {
-  console.log(yourChoice);
+  // console.log(yourChoice);
   var humanChoice, botChoice;
   humanChoice = yourChoice.id;
   botChoice = noToChoice(randToRpsInteger());
-  console.log('computer choice', botChoice);
+  // console.log('computer choice', botChoice);
   results = decideWinner(humanChoice, botChoice);
-  console.log(results);
+  // console.log(results);
   message = finalMessage(results);
-  console.log(message);
+  // console.log(message);
   rpsFrontEnd(yourChoice.id, botChoice, message);
 }
 
@@ -87,9 +87,65 @@ function rpsFrontEnd(humanImageChoice, botImageChoice, finalMessage) {
     "<img src= '" +
     imageDatabase[botImageChoice] +
     "'style='box-shadow: 10px 10px 170px 0px rgba(0,217,255,1);'>";
-    messageDiv.innerHTML= "<h1 style='color :" + finalMessage['color'] +"; font-size: 60px; padding: 30px; '>" + finalMessage["message"]+ "</h1>"
+  messageDiv.innerHTML =
+    "<h1 style='color :" +
+    finalMessage['color'] +
+    "; font-size: 60px; padding: 30px; '>" +
+    finalMessage['message'] +
+    '</h1>';
 
   document.getElementById('rpsid').appendChild(humanDiv);
   document.getElementById('rpsid').appendChild(messageDiv);
   document.getElementById('rpsid').appendChild(botDiv);
+}
+// challenge 4 changing colors of button
+
+var allButtons = document.getElementsByTagName('button');
+// console.log(allButtons);
+
+var copyAllButtons = [];
+for (let i = 0; i < allButtons.length; i++) {
+  copyAllButtons.push(allButtons[i].classList[1]);
+}
+console.log(copyAllButtons);
+
+function buttonColorChange(button) {
+  if (button.value === 'red') {
+    buttonsRed();
+  } else if (button.value === 'green') {
+    buttonGreen();
+  } else if (button.value === 'reset') {
+    reset();
+  } else if (button.value === 'random') {
+    rand();
+  }
+}
+
+function buttonsRed() {
+  for (let i = 0; i < allButtons.length; i++) {
+    allButtons[i].classList.remove(allButtons[i].classList[1]);
+    allButtons[i].classList.add('btn-danger');
+  }
+}
+
+function buttonGreen() {
+  for (let i = 0; i < allButtons.length; i++) {
+    allButtons[i].classList.remove(allButtons[i].classList[1]);
+    allButtons[i].classList.add('btn-success');
+  }
+}
+function reset() {
+  for (let i = 0; i < allButtons.length; i++) {
+    allButtons[i].classList.remove(allButtons[i].classList[1]);
+    allButtons[i].classList.add(copyAllButtons[i]);
+  }
+}
+
+function rand() {
+  let choices = ['btn-primary', 'btn-danger', 'btn-success', 'btn-warning'];
+
+  for (let i = 0; i < allButtons.length; i++) {
+    allButtons[i].classList.remove(allButtons[i].classList[1]);
+    allButtons[i].classList.add(choices[Math.floor(Math.random() * 4)]);
+  }
 }
