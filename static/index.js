@@ -30,6 +30,7 @@ function rps(yourChoice) {
   console.log(results);
   message = finalMessage(results);
   console.log(message);
+  rpsFrontEnd(yourChoice.id, botChoice, message);
 }
 
 function randToRpsInteger() {
@@ -61,4 +62,34 @@ function finalMessage([yourScore, computerScore]) {
   } else {
     return {message: 'won', color: 'green'};
   }
+}
+// part 3 javascript
+function rpsFrontEnd(humanImageChoice, botImageChoice, finalMessage) {
+  var imageDatabase = {
+    rock: document.getElementById('rock').src,
+    paper: document.getElementById('paper').src,
+    siccors: document.getElementById('siccors').src,
+  };
+  // remove all images
+  document.getElementById('rock').remove();
+  document.getElementById('paper').remove();
+  document.getElementById('siccors').remove();
+
+  var humanDiv = document.createElement('div');
+  var botDiv = document.createElement('div');
+  var messageDiv = document.createElement('div');
+
+  humanDiv.innerHTML =
+    "<img src= '" +
+    imageDatabase[humanImageChoice] +
+    " 'style = 'box-shadow: 10px 10px 170px 0px rgba(255,0,85,1); '>";
+  botDiv.innerHTML =
+    "<img src= '" +
+    imageDatabase[botImageChoice] +
+    "'style='box-shadow: 10px 10px 170px 0px rgba(0,217,255,1);'>";
+    messageDiv.innerHTML= "<h1 style='color :" + finalMessage['color'] +"; font-size: 60px; padding: 30px; '>" + finalMessage["message"]+ "</h1>"
+
+  document.getElementById('rpsid').appendChild(humanDiv);
+  document.getElementById('rpsid').appendChild(messageDiv);
+  document.getElementById('rpsid').appendChild(botDiv);
 }
