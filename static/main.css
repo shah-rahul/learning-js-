@@ -32,7 +32,10 @@
 }
 .flex-box-2,
 .flex-box-rps,
-.flex-box-change-color {
+.flex-box-change-color,
+.flex-bjr1 ,
+.flex-bjr2,
+.flex-bjr3{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -40,6 +43,23 @@
   /* border: 1px solid blue; */
 }
 
+.flex-bjr1, .flex-bjr2{
+  background-image: url("https://image.freepik.com/free-photo/green-poker-background_87414-2508.jpg");
+  color: #ffffff;
+}
+.flex-bjr1 div{
+  border: 1px solid white;
+  padding: 10px;
+  flex: 1;
+  text-align: center;
+  height: 350px;
+  /* width: 350px; */
+}
+
+.flex-bjr1 img{
+  width: 25%;
+  padding: 10px;
+}
 .flex-box-2 img {
   margin: 1rem;
   height: 300px;
@@ -51,4 +71,16 @@
 
 .flex-box-rps img:hover {
   box-shadow: 10px 10px 82px 0px rgba(31, 121, 133, 1);
+}
+
+.container-5{
+  border: 1px solid black;
+  width: 75%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+table, th, td{
+    padding: 5px;
+    border: 1px solid black;
 }

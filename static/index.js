@@ -107,7 +107,7 @@ var copyAllButtons = [];
 for (let i = 0; i < allButtons.length; i++) {
   copyAllButtons.push(allButtons[i].classList[1]);
 }
-console.log(copyAllButtons);
+// console.log(copyAllButtons);
 
 function buttonColorChange(button) {
   if (button.value === 'red') {
@@ -149,3 +149,48 @@ function rand() {
     allButtons[i].classList.add(choices[Math.floor(Math.random() * 4)]);
   }
 }
+// black jack project
+
+let bjGame = {
+  you: {scoreSpan: '#yourbj-result', div: '.your-box', score: 0},
+  dealer: {scoreSpan: '#dealerbj-result', div: '.dealer-box', score: 0},
+  cards: ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'K', 'J', 'Q', 'A'],
+};
+const YOU = bjGame['you'];
+const DEALER = bjGame['dealer'];
+const hitSound = new Audio('static/sounds/swish.m4a');
+
+document.querySelector('#bjhit').addEventListener('click', bjHit);
+document.querySelector('#bjdeal').addEventListener('click', bjDeal);
+
+function randomCard() {
+  let randomIndex = Math.floor(Math.random() * 13);
+  return bjGame['cards'][randomIndex];
+}
+function bjHit() {
+  let card = randomCard();
+  console.log(card);
+  showCard(card,YOU);
+}
+
+function showCard(card,activeplayer) {
+  let cardImage = document.createElement('img');
+  cardImage.src = `static/images/${card}.png`;
+  document.querySelector(activeplayer['div']).appendChild(cardImage);
+  hitSound.play();
+}
+
+function bjDeal() {
+  let yourImages = document.querySelector('.your-box').querySelectorAll('img');
+  for (i = 0; i < yourImages.length; i++) {
+    yourImages[i].remove();
+  }
+
+  let dealerImages = document
+    .querySelector('.dealer-box')
+    .querySelectorAll('img');
+  for (i = 0; i < dealerImages.length; i++) {
+    dealerImages[i].remove();
+  }
+}
+
