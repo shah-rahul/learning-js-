@@ -274,7 +274,7 @@ async function dealerLogic() {
     showCard(card, DEALER);
     updateScore(card, DEALER);
     showScore(DEALER);
-    await sleep(1000);
+    await sleep(1000); 
   }
 
   bjGame['turnsOver'] = true;
