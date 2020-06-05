@@ -174,9 +174,12 @@ let bjGame = {
 const YOU = bjGame['you'];
 const DEALER = bjGame['dealer'];
 const hitSound = new Audio('static/sounds/swish.m4a');
+const winSOund = new Audio('static/sounds/cash.mp3');
+const lossSound = new Audio('static/sounds/aww.mp3');
 
 document.querySelector('#bjhit').addEventListener('click', bjHit);
 document.querySelector('#bjdeal').addEventListener('click', bjDeal);
+document.querySelector('#bjstand').addEventListener('click', dealerLogic);
 
 function randomCard() {
   let randomIndex = Math.floor(Math.random() * 13);
@@ -200,6 +203,7 @@ function showCard(card, activeplayer) {
 }
 
 function bjDeal() {
+  showResult(computeWInner());
   let yourImages = document.querySelector('.your-box').querySelectorAll('img');
   for (i = 0; i < yourImages.length; i++) {
     yourImages[i].remove();
@@ -216,8 +220,8 @@ function bjDeal() {
   DEALER['score'] = 0;
   document.querySelector('#yourbj-result').textContent = 0;
   document.querySelector('#dealerbj-result').textContent = 0;
-  document.querySelector(activeplayer['scoreSpan']).style.color = 'white';
-  document.querySelector(activeplayer['dealerbj-result']).style.color = 'white';
+  document.querySelector('#yourbj-result').style.color = 'white';
+  document.querySelector('#dealerbj-result').style.color = 'white';
 }
 
 function updateScore(card, activeplayer) {
@@ -241,4 +245,54 @@ function showScore(activeplayer) {
     document.querySelector(activeplayer['scoreSpan']).textContent =
       activeplayer['score'];
   }
+}
+function dealerLogic() {
+  let card = randomCard();
+  showCard(card, DEALER);
+  updateScore(card, DEALER);
+  showScore(DEALER);
+  sh;
+}
+
+// compute winner who won
+function computeWInner() {
+  let winner;
+  if (YOU['score'] <= 21) {
+    if (YOU['score'] > DEALER['score'] || DEALER['score'] > 21) {
+      console.log('you won');
+      winner = YOU;
+    } else if (YOU['score'] < DEALER['score']) {
+      console.log('you =lost');
+      winner = DEALER;
+    } else if (YOU['score'] === DEALER['score']) {
+      console.log('you drew');
+    }
+  } else if (YOU['score'] > 21 && DEALER['score'] <= 21) {
+    console.log('you lost');
+    winner = DEALER;
+  } else if (YOU['score'] > 21 && DEALER['score'] > 21) {
+    console.log('you drew');
+    // winner= DEALER;
+  }
+  console.log('winner is', winner);
+  return winner;
+}
+
+function showResult(winner) {
+  let message, messageColor;
+  if (winner === YOU) {
+    message = 'you won!';
+    messageColor = 'green';
+    winSOund.play();
+  } else if (winner === DEALER) {
+    message = 'you lost!';
+    messageColor = 'red';
+    lossSound.play();
+  } else {
+    message = 'you drew';
+    messageColor = 'black';
+  }
+
+  document.querySelector('#bjresult').textContent = message;
+  document.querySelector('#bjresult').style.color = messageColor;
 }
