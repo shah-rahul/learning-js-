@@ -170,6 +170,11 @@ let bjGame = {
     Q: 10,
     A: [1, 11],
   },
+  wins: 0,
+  losses: 0,
+  draws: 0,
+  isStand: false,
+  turnsOver: false,
 };
 const YOU = bjGame['you'];
 const DEALER = bjGame['dealer'];
@@ -186,11 +191,13 @@ function randomCard() {
   return bjGame['cards'][randomIndex];
 }
 function bjHit() {
-  let card = randomCard();
-  console.log(card);
-  showCard(card, YOU);
-  updateScore(card, YOU);
-  showScore(YOU);
+  if (bjGame['isStand'] === false) {
+    let card = randomCard();
+    console.log(card);
+    showCard(card, YOU);
+    updateScore(card, YOU);
+    showScore(YOU);
+  }
 }
 
 function showCard(card, activeplayer) {
@@ -203,25 +210,32 @@ function showCard(card, activeplayer) {
 }
 
 function bjDeal() {
-  showResult(computeWInner());
-  let yourImages = document.querySelector('.your-box').querySelectorAll('img');
-  for (i = 0; i < yourImages.length; i++) {
-    yourImages[i].remove();
-  }
+  if (bjGame['turnsOver'] === true) {
+    bjGame['isStand'] = false;
+    let yourImages = document
+      .querySelector('.your-box')
+      .querySelectorAll('img');
+    for (i = 0; i < yourImages.length; i++) {
+      yourImages[i].remove();
+    }
 
-  let dealerImages = document
-    .querySelector('.dealer-box')
-    .querySelectorAll('img');
-  for (i = 0; i < dealerImages.length; i++) {
-    dealerImages[i].remove();
-  }
+    let dealerImages = document
+      .querySelector('.dealer-box')
+      .querySelectorAll('img');
+    for (i = 0; i < dealerImages.length; i++) {
+      dealerImages[i].remove();
+    }
 
-  YOU['score'] = 0;
-  DEALER['score'] = 0;
-  document.querySelector('#yourbj-result').textContent = 0;
-  document.querySelector('#dealerbj-result').textContent = 0;
-  document.querySelector('#yourbj-result').style.color = 'white';
-  document.querySelector('#dealerbj-result').style.color = 'white';
+    YOU['score'] = 0;
+    DEALER['score'] = 0;
+    document.querySelector('#yourbj-result').textContent = 0;
+    document.querySelector('#dealerbj-result').textContent = 0;
+    document.querySelector('#yourbj-result').style.color = 'white';
+    document.querySelector('#dealerbj-result').style.color = 'white';
+    document.querySelector('bjresult').textContent = 'lets play';
+    document.querySelector('bjresult').style.color = 'black';
+    bjGame['turnsOver'] = true;
+  }
 }
 
 function updateScore(card, activeplayer) {
@@ -246,12 +260,25 @@ function showScore(activeplayer) {
       activeplayer['score'];
   }
 }
-function dealerLogic() {
-  let card = randomCard();
-  showCard(card, DEALER);
-  updateScore(card, DEALER);
-  showScore(DEALER);
-  sh;
+
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function dealerLogic() {
+  bjGame['isStand'] = true;
+  
+
+  while (DEALER['score'] < 16 && bjGame['isStand'] === true) {
+    let card = randomCard();
+    showCard(card, DEALER);
+    updateScore(card, DEALER);
+    showScore(DEALER);
+    await sleep(1000);
+  }
+
+  bjGame['turnsOver'] = true;
+  showResult(computeWInner());
 }
 
 // compute winner who won
@@ -259,40 +286,44 @@ function computeWInner() {
   let winner;
   if (YOU['score'] <= 21) {
     if (YOU['score'] > DEALER['score'] || DEALER['score'] > 21) {
-      console.log('you won');
+      bjGame['wins']++;
       winner = YOU;
     } else if (YOU['score'] < DEALER['score']) {
-      console.log('you =lost');
+      bjGame['losses']++;
       winner = DEALER;
     } else if (YOU['score'] === DEALER['score']) {
-      console.log('you drew');
+      bjGame['drews']++;
     }
   } else if (YOU['score'] > 21 && DEALER['score'] <= 21) {
-    console.log('you lost');
+    bjGame['losses']++;
     winner = DEALER;
   } else if (YOU['score'] > 21 && DEALER['score'] > 21) {
-    console.log('you drew');
-    // winner= DEALER;
+    bjGame['drews']++;
   }
-  console.log('winner is', winner);
+  console.log(bjGame);
   return winner;
 }
 
 function showResult(winner) {
-  let message, messageColor;
-  if (winner === YOU) {
-    message = 'you won!';
-    messageColor = 'green';
-    winSOund.play();
-  } else if (winner === DEALER) {
-    message = 'you lost!';
-    messageColor = 'red';
-    lossSound.play();
-  } else {
-    message = 'you drew';
-    messageColor = 'black';
-  }
+  if (bjGame['turnsOver'] === true) {
+    let message, messageColor;
+    if (winner === YOU) {
+      document.querySelector('#wins').textContent = bjGame['wins'];
+      message = 'you won!';
+      messageColor = 'green';
+      winSOund.play();
+    } else if (winner === DEALER) {
+      document.querySelector('#losses').textContent = bjGame['losses'];
+      message = 'you lost!';
+      messageColor = 'red';
+      lossSound.play();
+    } else {
+      document.querySelector('#drews').textContent = bjGame['drews'];
+      message = 'you drew';
+      messageColor = 'black';
+    }
 
-  document.querySelector('#bjresult').textContent = message;
-  document.querySelector('#bjresult').style.color = messageColor;
+    document.querySelector('#bjresult').textContent = message;
+    document.querySelector('#bjresult').style.color = messageColor;
+  }
 }
